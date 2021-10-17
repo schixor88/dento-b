@@ -11,7 +11,7 @@ app.use(cors())
 //register and login
 app.use("/auth", require("./routes/jwtAuth"));
 
-
+app.use("/user", require("./routes/user.routes"));
 
 
 app.listen(5000, ()=>{
