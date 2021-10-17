@@ -14,9 +14,9 @@ module.exports = function(req, res, next) {
       }
     } else if (req.path === "/login") {
       if (![email, password].every(Boolean)) {
-        return res.json("Missing Credentials");
+        return res.status(401).json("Missing Credentials");
       } else if (!validEmail(email)) {
-        return res.json("Invalid Email");
+        return res.status(401).json("Invalid Email");
       }
     }
   

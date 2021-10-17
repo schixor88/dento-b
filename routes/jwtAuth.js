@@ -1,12 +1,16 @@
 const router = require('express').Router()
 const pool = require("../db");
 const bcrypt = require("bcrypt");
+//middlewares
 const jwtGenerator = require("../utils/jwtGenerator");
-const e = require('express');
+const validInfo = require("../middleware/validinfo.middleware");
+const authorization = require("../middleware/authorization.middleware");
+
+
 
 //registering
 
-router.post("/register", async (req, res)=>{
+router.post("/register", validInfo, async (req, res)=>{
     try {
 
         //1. de-struct the req.body
@@ -42,7 +46,7 @@ router.post("/register", async (req, res)=>{
 
 //login
 
-router.post("/login", async (req, res)=>{
+router.post("/login", validInfo, async (req, res)=>{
     try {
         //1. destruct the req body
         const {email, password} = req.body
@@ -64,6 +68,19 @@ router.post("/login", async (req, res)=>{
         res.json({token});
     } catch (err) {
         console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+})
+
+// verificatuin
+
+router.get("/is-verify", authorization, async(req, res)=>{
+    try {
+
+        res.json(true);
+        
+    } catch (err) {
+        console.error(err.message)
         res.status(500).send("Server Error");
     }
 })
