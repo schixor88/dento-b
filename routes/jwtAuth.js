@@ -5,10 +5,21 @@ const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validinfo.middleware");
 const authorization = require("../middleware/authorization.middleware");
+const { roleControl } = require('../middleware/rolecontrol.middleware');
+
+
+//authentication
+
+// -- register user
+// -- login user
+// -- convert user to admin/mod by admin
+// -- convert mod/admin to user by mod
+// -- delete user by admin
+// -- edit user name, email, phone by admin
 
 
 
-//registering
+//register a new user as 'user'
 
 router.post("/register", validInfo, async (req, res)=>{
     try {
@@ -31,7 +42,7 @@ router.post("/register", validInfo, async (req, res)=>{
 
 
         //5. generating out jwt token
-        const token = jwtGenerator(newUser.rows[0].user_id);
+        const token = jwtGenerator(newUser.rows[0].user_id, newUser.rows[0].user_role);
 
         res.json({
             token
@@ -44,7 +55,7 @@ router.post("/register", validInfo, async (req, res)=>{
 })
 
 
-//login
+//login the user or admin
 
 router.post("/login", validInfo, async (req, res)=>{
     try {
@@ -63,7 +74,7 @@ router.post("/login", validInfo, async (req, res)=>{
         }
         //4. give jwt token
 
-        const token = jwtGenerator(user.rows[0].user_id);
+        const token = jwtGenerator(user.rows[0].user_id, user.rows[0].user_role);
 
         res.json({token});
     } catch (err) {
@@ -83,6 +94,38 @@ router.get("/is-verify", authorization, async(req, res)=>{
         console.error(err.message)
         res.status(500).send("Server Error");
     }
+})
+
+
+// check if role controller is working, 
+
+router.get("/admin", authorization, roleControl('admin'), async(req, res)=>{
+    try{
+
+        res.json(true)
+
+    }catch(err){
+        console.error("lol")
+        res.status(500).send("lol")
+    }
+})
+
+
+// use a admin token to promote any user to admin/mod
+
+router.post("/promoteToAdmin", roleControl('admin'), async(req, res)=>{
+    try{
+
+        const {user_id} = req.body;
+        const updatedUser = await (await pool.query("UPDATE users SET user_role = 'admin' WHERE user_id = $1 RETURNING *" , [user_id])).rows[0];
+        
+        res.json({
+            updatedUser
+        })
+
+
+    }catch(err){  console.error("lol")
+    res.status(500).send("lol")}
 })
 
 module.exports = router;
