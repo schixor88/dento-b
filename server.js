@@ -9,8 +9,21 @@ app.use(cors())
 
 //ROUTES//
 
-//register and login
+//USER AUTHENTICATIONS
+//-- login
+//-- signup
+//-- forgot password
 app.use("/auth", require("./routes/auth.routes"));
+
+//ADMIN ACCESS CONTROL
+//-- promote user to admin/mod
+//-- demote admin/mod to user
+//-- delete a user
+
+
+//USER FUNCTIONS
+//-- see user details
+//-- edit user details
 
 app.use("/user", require("./routes/user.routes"));
 
