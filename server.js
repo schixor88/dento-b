@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const users = require('./contract/user.values')
 
 app.use(express.json()) //req.body
 app.use(cors())
@@ -9,7 +10,7 @@ app.use(cors())
 //ROUTES//
 
 //register and login
-app.use("/auth", require("./routes/jwtAuth"));
+app.use("/auth", require("./routes/auth.routes"));
 
 app.use("/user", require("./routes/user.routes"));
 

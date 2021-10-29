@@ -3,7 +3,7 @@ const pool = require("../db");
 //middlewares
 const authorization = require("../middleware/authorization.middleware");
 const { roleControl } = require('../middleware/rolecontrol.middleware');
-const { use } = require('./jwtAuth');
+const { use } = require('./auth.routes');
 
 // verificatuin
 
