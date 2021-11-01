@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validinfo.middleware");
 const { roleControl } = require('../middleware/rolecontrol.middleware');
+const role = require('../static/roles.static');
 
 
 //authentication
@@ -16,8 +17,6 @@ const { roleControl } = require('../middleware/rolecontrol.middleware');
 // -- delete user by admin
 // -- get all users by role
 // -- edit user name, email, phone by admin
-
-
 
 //register a new user as 'user'
 
@@ -83,27 +82,10 @@ router.post("/login", validInfo, async (req, res) => {
     }
 })
 
+//random test API
 
-// delete a user
-
-router.post("/deleteUser", roleControl('admin'), async (req, res) => {
-    try {
-
-        const { user_id } = req.body
-        const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [user_id]);
-        if (user.rows.length == 0) {
-            return res.status(401).json({ "message": "User Not Found!" })
-        }
-        const deleteUser = await pool.query("DELETE FROM users WHERE user_id= $1 ", [user_id]);
-
-        res.json({
-            "msg": "user deleted"
-        })
-
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).send("Server Error");
-    }
+router.get("/testapi", roleControl(role.user), async(req, res)=>{
+    res.status(300).send("Functional")
 })
 
 

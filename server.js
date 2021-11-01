@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const users = require('./contract/user.values')
 
 app.use(express.json()) //req.body
 app.use(cors())
+
+const swaggerUi = require("swagger-ui-express"),
+swaggerDocument = require("./swagger.json");
 
 
 //ROUTES//
@@ -20,6 +22,8 @@ app.use("/auth", require("./routes/auth.routes"));
 //-- demote admin/mod to user
 //-- delete a user
 
+app.use("/admin", require("./routes/admin.routes"));
+
 
 //USER FUNCTIONS
 //-- see user details
@@ -28,6 +32,17 @@ app.use("/auth", require("./routes/auth.routes"));
 app.use("/user", require("./routes/user.routes"));
 
 
-app.listen(5000, ()=>{
-    console.log("-- server running on 5000")
+
+
+
+app.use(
+    '/api-docs',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+  ); 
+
+
+
+app.listen(process.env.port, ()=>{
+    console.log(`-- server running on ${process.env.port}`)
 })
