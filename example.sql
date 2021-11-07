@@ -90,5 +90,18 @@ CREATE TABLE appointments(
     created_on TIMESTAMP DEFAULT NOW(),
     patient_id int,
     doctor_id int,
-    appointment_for TIMESTAMP DEFAULT NOW()
-)
+    cost float,
+    status varchar(10) DEFAULT 'pending',
+    appointment_for TIMESTAMP DEFAULT NOW(),
+    constraint fk_patient foreign key(patient_id) references patients(id) on delete cascade,
+    constraint fk_doctor foreign key(doctor_id) references doctors(id) on delete cascade
+);
+
+insert into appointments(title, subtitle, coast, patient_id, doctor_id)
+VALUES('teeth scaling', 'scaling the top teeth', 50, 4,1);
+
+
+select a.id, a.title, a.subtitle, a.appointment_for, d.department, u.name as "doctor", u.contact  
+from appointments as a 
+    inner join doctors as d on a.doctor_id=d.id 
+    inner join users as u on u.id = d.id; 
