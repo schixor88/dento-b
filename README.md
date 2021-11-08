@@ -5,8 +5,6 @@ Planned a simple backend as a dental management system which majorly facilitates
 
 Here the system has NodeJs and ExpressJs for API construction. The database used is Postgres.
 
-<hr>
-
 ## Modules
 
 The system will be handling `Users` which are further categorized as `Admins`, `Doctors`, `Patients`. Users will be able to interact with varuios concepts of digital cinic management mainly being their appointment oraganization.
