@@ -75,10 +75,11 @@ router.post("/login", validInfo, async (req, res) => {
         //4. give jwt token
 
         const token = jwtGenerator(user.rows[0].user_id, user.rows[0].user_role);
-        const token2 = jwtGenerator(user.rows[0].user_id, user.rows[0].user_role);
+        // const token2 = jwtGenerator(user.rows[0].user_id, user.rows[0].user_role);
 
         // res.json({ token });
-        res.json(responsify.success("00","Hello", [{token:token},{token2:token2}]))
+        // res.json(responsify.success("00","Hello", [{token:token},{token2:token2}]))
+        res.json(responsify.success("00","Hello", {token:token}))
     } catch (err) {
         console.error(err.message);
         res.status(500).json(responsify.success("500","Hello", null))
